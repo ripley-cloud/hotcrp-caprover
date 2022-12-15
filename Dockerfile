@@ -1,33 +1,28 @@
-FROM php:7.4-fpm
+FROM trafex/php-nginx
 
-RUN docker-php-ext-install mysqli
+USER root
 
+RUN apk add --no-cache php81-zip php81-gmp msmtp gettext git
 
-RUN apt-get update && \
-    apt-get install -y \
-        zlib1g-dev libzip-dev \
-	libicu-dev libgmp-dev \
-	re2c libmhash-dev \
-	libmcrypt-dev file \
-	poppler-utils git
-	
-RUN apt-get install -y -q --no-install-recommends \
-		msmtp
-		
-RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/
-RUN docker-php-ext-configure gmp 
-RUN docker-php-ext-install gmp
+RUN rm -rf /var/www/html
+RUN git clone https://github.com/kohler/hotcrp /var/www/html
 
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl
+COPY config/msmtprc /etc/msmtprc.template
+COPY config/msmtprc /etc/msmtprc
+RUN chown nobody /etc/msmtprc
+RUN ln -sf /usr/bin/msmtp /usr/bin/sendmail
+RUN ln -sf /usr/bin/msmtp /usr/sbin/sendmail
 
-RUN docker-php-ext-install zip
+COPY entry.sh /
+RUN chmod +x /entry.sh
 
-# And clean up the image
+COPY config/php.ini /etc/php81/conf.d/custom.ini
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
-RUN rm -rf /var/lib/apt/lists/*
+USER nobody
+ 
+COPY options.php /var/www/html/conf/options.php
+COPY checkAndCreateDatabase.php /
 
-
-WORKDIR /srv/www/
-RUN git clone https://github.com/kohler/hotcrp api
-COPY options.php /srv/www/api/conf/options.php
+# run at container startup
+ENTRYPOINT ["/entry.sh"]

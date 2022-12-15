@@ -16,9 +16,9 @@ global $Opt;
 //   dbUser          Database user name. Defaults to $Opt["dbName"].
 //   dbPassword      Password for database user.
 
-$Opt["dbName"] = $_ENV["MYSQL_DATABASE"];
+$Opt["dbName"] = $_SERVER["HOTCRP_SHORT_NAME"];
 $Opt["dbUser"] = "root";
-$Opt["dbPassword"] = $_ENV["MYSQL_ROOT_PASSWORD"];
+$Opt["dbPassword"] = $_SERVER["MYSQL_ROOT_PASSWORD"];
 
 
 // GENERAL CONFIGURATION
@@ -29,7 +29,6 @@ $Opt["dbPassword"] = $_ENV["MYSQL_ROOT_PASSWORD"];
 //   multiconference, multiconferenceAnalyzer
 //                   Support multiple conferences from a single installation.
 //                   See README.md.
-
 
 // NAMES AND SITES
 //
@@ -43,12 +42,12 @@ $Opt["dbPassword"] = $_ENV["MYSQL_ROOT_PASSWORD"];
 //   paperSite       [OPTIONAL] URL for this HotCRP installation. Used in
 //                   emails. Default is derived from the access URL.
 //   conferenceSite  [OPTIONAL] Conference site URL (CFP, registration).
-if(!empty($_ENV["HOTCRP_PAPER_SITE"]))
-    $Opt["paperSite"] = $_ENV["HOTCRP_PAPER_SITE"];
-if(!empty($_ENV["HOTCRP_SHORT_NAME"]))
-    $Opt["shortName"] = $_ENV["HOTCRP_SHORT_NAME"];
-if(!empty($_ENV["HOTCRP_LONG_NAME"]))
-    $Opt["shortName"] = $_ENV["HOTCRP_LONG_NAME"];
+if(!empty($_SERVER["HOTCRP_PAPER_SITE"]))
+    $Opt["paperSite"] = $_SERVER["HOTCRP_PAPER_SITE"];
+if(!empty($_SERVER["HOTCRP_SHORT_NAME"]))
+    $Opt["shortName"] = $_SERVER["HOTCRP_SHORT_NAME"];
+if(!empty($_SERVER["HOTCRP_LONG_NAME"]))
+    $Opt["shortName"] = $_SERVER["HOTCRP_LONG_NAME"];
 
 // EMAIL
 //
@@ -84,12 +83,12 @@ if(!empty($_ENV["HOTCRP_LONG_NAME"]))
 //                   always safe to set postfixMailer to true, although the
 //                   resulting mails may not be standards compliant.
 
-$Opt["contactName"] = $_ENV["HOTCRP_CONTACT_NAME"];
-$Opt["contactEmail"] = $_ENV["HOTCRP_EMAIL_CONTACT"];
+$Opt["contactName"] = $_SERVER["HOTCRP_CONTACT_NAME"];
+$Opt["contactEmail"] = $_SERVER["HOTCRP_EMAIL_CONTACT"];
 $Opt["sendEmail"] = true;
-$Opt["emailFrom"] = $_ENV["HOTCRP_EMAIL_FROM"];
-$Opt["sendmailParam"] = $_ENV["HOTCRP_SENDMAIL_PARAM"];
-$Opt["emailSender"] = empty($_ENV["SENDER_ENVELOPE_ADDRESS"]) ? $_ENV["HOTCRP_EMAIL_FROM"] : $_ENV["SENDER_ENVELOPE_ADDRESS"];
+$Opt["emailFrom"] = $_SERVER["HOTCRP_EMAIL_FROM"];
+$Opt["sendmailParam"] = $_SERVER["HOTCRP_SENDMAIL_PARAM"];
+$Opt["emailSender"] = empty($_SERVER["SENDER_SERVERELOPE_ADDRESS"]) ? $_SERVER["HOTCRP_EMAIL_FROM"] : $_SERVER["SENDER_SERVERELOPE_ADDRESS"];
 $Opt["internalMailer"] = true;
 
 
@@ -132,6 +131,7 @@ $Opt["internalMailer"] = true;
 //   s3_secret       Amazon AWS secret access key (used for S3).
 //   dbNoPapers      Set to true to not store papers in the database.
 //                   Requires filestore, S3 storage, or both.
+$Opt["docstore"] = true;
 
 
 // TIMES AND DATES
@@ -224,5 +224,5 @@ $Opt["smartScoreCompare"] = true;
 //                   paper format checker).
 //   banalLimit      Limit on number of parallel paper format checker
 //                   executions. Defaults to 8.
-$Opt["dbHost"] = $_ENV['MYSQL_HOST'];
-$Opt["dsn"] = "mysql://root:".$_ENV["MYSQL_ROOT_PASSWORD"]."@".$_ENV["MYSQL_HOST"].":".($_ENV["MYSQL_PORT"] ? $_ENV["MYSQL_PORT"] : 3306)."/".$_ENV["MYSQL_DATABASE"];
+$Opt["dbHost"] = $_SERVER['MYSQL_HOST'];
+$Opt["dsn"] = "mysql://root:".$_SERVER["MYSQL_ROOT_PASSWORD"]."@".$_SERVER["MYSQL_HOST"].":".($_SERVER["MYSQL_PORT"] ? $_SERVER["MYSQL_PORT"] : 3306)."/".$_SERVER["HOTCRP_SHORT_NAME"];
