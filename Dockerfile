@@ -5,7 +5,7 @@ USER root
 RUN apk add --no-cache php81-zip php81-gmp msmtp gettext git
 
 RUN rm -rf /var/www/html
-RUN git clone https://github.com/kohler/hotcrp /var/www/html
+RUN chown -R nobody /var/www/
 
 COPY config/msmtprc /etc/msmtprc.template
 COPY config/msmtprc /etc/msmtprc
@@ -20,6 +20,7 @@ COPY config/php.ini /etc/php81/conf.d/custom.ini
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 USER nobody
+RUN git clone https://github.com/kohler/hotcrp /var/www/html
  
 COPY options.php /var/www/html/conf/options.php
 COPY checkAndCreateDatabase.php /
