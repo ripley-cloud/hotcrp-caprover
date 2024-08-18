@@ -2,7 +2,7 @@ FROM trafex/php-nginx
 
 USER root
 
-RUN apk add --no-cache php81-zip php81-gmp msmtp gettext git
+RUN apk add --no-cache php83-zip php83-gmp msmtp gettext git
 
 RUN rm -rf /var/www/html
 RUN chown -R nobody /var/www/
@@ -16,7 +16,7 @@ RUN ln -sf /usr/bin/msmtp /usr/sbin/sendmail
 COPY entry.sh /
 RUN chmod +x /entry.sh
 
-COPY config/php.ini /etc/php81/conf.d/custom.ini
+COPY config/php.ini /etc/php83/conf.d/custom.ini
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 USER nobody
